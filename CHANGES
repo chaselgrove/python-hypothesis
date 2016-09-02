@@ -1,0 +1,8 @@
+change log for python-hypothesis
+https://github.com/chaselgrove/python-hypothesis
+
+0.1.0 -- 2 September 2016
+
+    Initial version.
+
+    Added API module and Annotation class with TagSet class for tags.
