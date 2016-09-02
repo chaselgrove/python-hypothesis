@@ -13,7 +13,7 @@ setup(name='python-hypothesis',
       packages=['h_annot'], 
       scripts=[], 
       install_requires=['requests', 
-                        'python-dateutil']
+                        'python-dateutil'], 
       classifiers=['Development Status :: 3 - Alpha', 
                    'Environment :: Web Environment', 
                    'Intended Audience :: Developers', 
@@ -22,7 +22,7 @@ setup(name='python-hypothesis',
                    'Operating System :: OS Independent', 
                    'Programming Language :: Python', 
                    'Topic :: Internet :: WWW/HTTP', 
-                   'Topic :: Software Development :: Libraries']
+                   'Topic :: Software Development :: Libraries'], 
       license='BSD license', 
       long_description=long_description
      )
