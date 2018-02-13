@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-from distutils.core import setup
+from setuptools import setup
 
 long_description = open('README.rst').read()
 
 setup(name='python-hypothesis', 
-      version='0.1.0', 
+      version='0.1.1', 
       description='Python library for the Hypothes.is API', 
       author='Christian Haselgrove', 
       author_email='christian.haselgrove@umassmed.edu', 

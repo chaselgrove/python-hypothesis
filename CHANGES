@@ -6,3 +6,9 @@ https://github.com/chaselgrove/python-hypothesis
     Initial version.
 
     Added API module and Annotation class with TagSet class for tags.
+
+0.1.1 -- 13 February 2018
+
+    Added Annotation.search().
+
+    Added unit tests.
