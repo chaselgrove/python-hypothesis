@@ -99,6 +99,13 @@ class Annotation(object):
         return cls(auth, data)
 
     @classmethod
+    def search(cls, auth=None, **kwargs):
+        data = api.search(auth, **kwargs)
+        obj = json.loads(data)
+        rv = [ cls(auth, json.dumps(row)) for row in obj['rows'] ]
+        return rv
+
+    @classmethod
     def create(cls, auth, title, tags, text, uri):
         obj = {'document': {'title': title}, 
                'tags': tags, 
