@@ -14,6 +14,9 @@ upload :
 check : 
 	python setup.py check
 
+test : 
+	python -m unittest -vb tests
+
 clean : 
 	rm -f MANIFEST h_annot/*.pyc
 
