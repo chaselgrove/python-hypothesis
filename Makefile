@@ -18,7 +18,7 @@ test :
 	python -m unittest -vb tests
 
 clean : 
-	rm -f MANIFEST h_annot/*.pyc
+	rm -f MANIFEST h_annot/*.pyc tests/*.pyc
 
 clobber : clean
 	rm -rf dist
