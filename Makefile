@@ -1,8 +1,8 @@
 default : build
 
-build : dist/python-hypothesis-0.1.1.tar.gz
+build : dist/python-hypothesis-0.2.0.tar.gz
 
-dist/python-hypothesis-0.1.1.tar.gz : 
+dist/python-hypothesis-0.2.0.tar.gz : 
 	python setup.py sdist
 
 register : 
