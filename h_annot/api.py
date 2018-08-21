@@ -1,6 +1,7 @@
 # See file COPYING distributed with python-hypothesis for copyright and 
 # license.
 
+import six
 import urllib
 import requests
 
@@ -23,7 +24,10 @@ def search(auth, **kwargs):
     if not kwargs:
         url = base_url
     else:
-        url = '%s?%s' % (base_url, urllib.urlencode(kwargs))
+        if six.PY2:
+            url = '%s?%s' % (base_url, urllib.urlencode(kwargs))
+        else:
+            url = '%s?%s' % (base_url, urllib.parse.urlencode(kwargs))
     r = requests.get(url, headers=headers)
     if r.status_code != 200:
         raise APIError(r)

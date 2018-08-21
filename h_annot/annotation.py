@@ -1,6 +1,7 @@
 # See file COPYING distributed with python-hypothesis for copyright and 
 # license.
 
+import six
 import json
 import dateutil.parser
 from . import api
@@ -92,7 +93,7 @@ class Annotation(object):
     def load(cls, annot_id, auth=None):
         try:
             data = api.read(auth, annot_id)
-        except APIError, data:
+        except APIError as data:
             if data.response.status_code == 404:
                 raise KeyError('annotation ID %s not found' % annot_id)
             raise
