@@ -1,3 +1,4 @@
+import os
 import unittest
 import json
 import h_annot.api
@@ -54,6 +55,20 @@ class TestAPI(unittest.TestCase):
             self.fail('json.loads() failed')
         self.assertIn('userid', obj)
         self.assertEqual(obj['userid'], None)
+        return
+
+    def test_authenticated_profile(self):
+        if 'AUTH_TOKEN' not in os.environ:
+            self.skipTest('AUTH_TOKEN is not defined')
+        if 'USERID' not in os.environ:
+            self.skipTest('USERID is not defined')
+        data = h_annot.api.profile(os.environ['AUTH_TOKEN'])
+        try:
+            obj = json.loads(data)
+        except:
+            self.fail('json.loads() failed')
+        self.assertIn('userid', obj)
+        self.assertEqual(obj['userid'], os.environ['USERID'])
         return
 
 # eof
