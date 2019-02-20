@@ -16,3 +16,7 @@ https://github.com/chaselgrove/python-hypothesis
 0.2.0 -- 21 August 2018
 
     Added support for Python 3 (Charles Reid and John David Pressman).
+
+0.2.1 -- 20 February 2019
+
+    Added api.profile().

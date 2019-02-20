@@ -1,15 +1,21 @@
 default : build
 
-build : dist/python-hypothesis-0.2.0.tar.gz
+PACKAGE_FILES = dist/python-hypothesis-0.2.1.tar.gz \
+                dist/python_hypothesis-0.2.1-py2-none-any.whl
 
-dist/python-hypothesis-0.2.0.tar.gz : 
+build : $(PACKAGE_FILES)
+
+dist/python-hypothesis-0.2.1.tar.gz : 
 	python setup.py sdist
+
+dist/python_hypothesis-0.2.1-py2-none-any.whl : 
+	python setup.py bdist_wheel
 
 register : 
 	python setup.py register
 
-upload : 
-	python setup.py sdist upload
+upload : $(PACKAGE_FILES)
+	python -m twine upload $^
 
 check : 
 	python setup.py check
