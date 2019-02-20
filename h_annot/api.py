@@ -69,4 +69,14 @@ def delete(auth, annot_id):
         raise APIError(r)
     return r.text
 
+def profile(auth):
+    url = '%s/api/profile' % server
+    headers = {'Accept': 'application/json'}
+    if auth:
+        headers['Authorization'] = 'Bearer %s' % auth
+    r = requests.get(url, headers=headers)
+    if r.status_code != 200:
+        raise APIError(r)
+    return r.text
+
 # eof

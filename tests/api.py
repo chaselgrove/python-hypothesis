@@ -46,4 +46,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(obj['rows'][0]['uri'], uri)
         return
 
+    def test_profile(self):
+        data = h_annot.api.profile(None)
+        try:
+            obj = json.loads(data)
+        except:
+            self.fail('json.loads() failed')
+        self.assertIn('userid', obj)
+        self.assertEqual(obj['userid'], None)
+        return
+
 # eof
