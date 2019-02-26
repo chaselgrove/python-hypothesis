@@ -1,0 +1,15 @@
+---
+- name: set up a hypothesis dev server
+  hosts: aws
+  remote_user: admin
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  roles:
+    - basic
+    - nodejs
+    - docker
+    - hypothesis
+
+# eof

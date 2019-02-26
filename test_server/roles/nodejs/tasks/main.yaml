@@ -1,0 +1,15 @@
+---
+
+- name: download nodejs debian repository setup script
+  get_url:
+    url: https://deb.nodesource.com/setup_11.x
+    dest: /root/setup_11.x
+
+- name: execute nodejs debian repository setup script
+  command:
+    /bin/bash /root/setup_11.x
+
+- name: install nodejs
+  apt: name=nodejs
+
+# eof

@@ -1,0 +1,43 @@
+---
+
+- name: install apt-transport-https
+  apt: name=apt-transport-https
+
+- name: install ca-certificates
+  apt: name=ca-certificates
+
+- name: install curl
+  apt: name=curl
+
+- name: install gnupg2
+  apt: name=gnupg2
+
+- name: install software-properties-common
+  apt: name=software-properties-common
+
+- name: install the debian docker key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+
+- name: get lsb_release
+  command:
+    lsb_release -cs
+  register: release
+
+- name: add docker debian repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ release.stdout }} stable
+
+- name: install docker-ce
+  apt: name=docker-ce
+
+- name: install docker-ce-cli
+  apt: name=docker-ce-cli
+
+- name: install containerd.io
+  apt: name=containerd.io
+
+- name: install docker-compose
+  apt: name=docker-compose
+
+# eof

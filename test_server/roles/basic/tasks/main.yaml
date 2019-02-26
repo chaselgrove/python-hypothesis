@@ -1,0 +1,42 @@
+---
+
+- name: update
+  apt: update_cache=yes
+
+- name: install vim
+  apt: name=vim
+
+- name: install build-essential
+  apt: name=build-essential
+
+- name: install git
+  apt: name=git
+
+- name: install libevent-dev
+  apt: name=libevent-dev
+
+- name: install libffi-dev
+  apt: name=libffi-dev
+
+- name: install libfontconfig
+  apt: name=libfontconfig
+
+- name: install libpq-dev
+  apt: name=libpq-dev
+
+- name: install libssl-dev
+  apt: name=libssl-dev
+
+- name: install python-dev
+  apt: name=python-dev
+
+- name: install python-pip
+  apt: name=python-pip
+
+- name: install tox
+  pip: name=tox
+
+- name: install tox-pip-extensions
+  pip: name=tox-pip-extensions
+
+# eof

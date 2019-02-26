@@ -1,0 +1,49 @@
+---
+
+# we set force here to make sure this won't fail due to our modified 
+# docker-compose.yml (see below) if we rerun
+
+- name: clone hypothesis repository
+  git:
+    repo: https://github.com/hypothesis/h.git
+    dest: /root/h
+    force: yes
+
+- name: install gulp
+  npm:
+    name: gulp-cli
+    global: yes
+
+# we change the version number in docker-compose.yml to satisfy the version 
+# of docker-compose available in Debian 9 during development
+
+- name: fix docker-compose.yml
+  lineinfile:
+    path: /root/h/docker-compose.yml
+    line: "version: '3'"
+    state: absent
+
+- name: fix docker-compose.yml part 2
+  lineinfile:
+    path: /root/h/docker-compose.yml
+    line: "version: '2'"
+    insertbefore: BOF
+
+- name: install yarn debian key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+
+- name: add yarn debian repository
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+
+- name: install yarn
+  apt: name=yarn
+
+- name: clone hypothesis client repository
+  git:
+    repo: https://github.com/hypothesis/client.git
+    dest: /root/client
+
+
+# eof
