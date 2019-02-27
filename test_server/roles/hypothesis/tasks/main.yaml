@@ -1,5 +1,8 @@
 ---
 
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 # we set force here to make sure this won't fail due to our modified 
 # docker-compose.yml (see below) if we rerun
 

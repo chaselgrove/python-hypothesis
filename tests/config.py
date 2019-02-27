@@ -1,3 +1,6 @@
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 import os
 try:
     import configparser

@@ -1,5 +1,8 @@
 ---
 
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 - name: download nodejs debian repository setup script
   get_url:
     url: https://deb.nodesource.com/setup_11.x

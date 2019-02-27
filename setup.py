@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 from setuptools import setup
 
 long_description = open('README.rst').read()

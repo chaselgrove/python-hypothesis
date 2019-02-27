@@ -1,3 +1,6 @@
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 # The test suite reads parameters from tests.config.  If
 # PYTHON_HYPOTHESIS_TESTS_CONFIG is defined, the configuration from
 # that file is applied on top of tests.config (items can be added and

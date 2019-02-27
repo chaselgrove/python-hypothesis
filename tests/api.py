@@ -1,3 +1,6 @@
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 import unittest
 import json
 import h_annot.api

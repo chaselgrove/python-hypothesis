@@ -1,3 +1,6 @@
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 default : build
 
 PACKAGE_FILES = dist/python-hypothesis-0.2.1.tar.gz \

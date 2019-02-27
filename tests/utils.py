@@ -1,3 +1,6 @@
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
 try:
     import urlparse
 except ImportError:
