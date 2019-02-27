@@ -1,6 +1,7 @@
 # See file COPYING distributed with python-hypothesis for copyright and 
 # license.
 
+import contextlib
 import six
 
 if six.PY2:
@@ -9,6 +10,16 @@ if six.PY2:
 else:
     from .annotation import Annotation
     from . import api
+
+@contextlib.contextmanager
+def server(url):
+    orig_server = api.server
+    api.server = url
+    try:
+        yield
+    finally:
+        api.server = orig_server
+    return
 
 def get_oauth_url(client_id, state=None):
     url = '%s/oauth/authorize?response_type=code&client_id=%s' % (api.server, client_id)
