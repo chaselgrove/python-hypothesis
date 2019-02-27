@@ -1,11 +1,13 @@
 import unittest
 import json
 import h_annot
+from . import config
 
 class TestAnnotation(unittest.TestCase):
 
-    def test_read(self):
-        annot = h_annot.Annotation.load('v8Y0ix_lSRmDnEKhNr19eQ')
+    @config.params('TestAnnotation:annotation_id')
+    def test_read(self, annotation_id):
+        annot = h_annot.Annotation.load(annotation_id)
         self.assertIsInstance(annot, h_annot.Annotation)
 
     def test_not_found(self):
