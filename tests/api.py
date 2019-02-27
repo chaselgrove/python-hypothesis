@@ -80,9 +80,7 @@ class TestAPI(unittest.TestCase):
                         client_secret, 
                         username, 
                         password):
-        try:
-            orig_server = h_annot.api.server
-            h_annot.api.server = server
+        with h_annot.server(server):
             code = utils.get_oauth_code(client_id, username, password)
             data = h_annot.api.oauth_token(client_id, client_secret, code)
             try:
@@ -104,8 +102,6 @@ class TestAPI(unittest.TestCase):
             self.assertIn('expires_in', obj)
             self.assertIn('refresh_token', obj)
             self.assertIn('scope', obj)
-        finally:
-            h_annot.api.server = orig_server
         return
 
 # eof
