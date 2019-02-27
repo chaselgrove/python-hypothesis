@@ -16,6 +16,6 @@ def get_oauth_url(client_id, state=None):
         url = url + '&state=' + state
     return url
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 # eof
