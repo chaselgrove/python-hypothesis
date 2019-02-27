@@ -68,4 +68,36 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(obj['userid'], userid)
         return
 
+    @config.params('TestAPI:oauth_server', 
+                   'TestAPI:oauth_client_id', 
+                   'TestAPI:oauth_client_secret', 
+                   'TestAPI:oauth_code')
+    def test_oauth_flow(self, server, client_id, client_secret, code):
+        try:
+            orig_server = h_annot.api.server
+            h_annot.api.server = server
+            data = h_annot.api.oauth_token(client_id, client_secret, code)
+            try:
+                obj = json.loads(data)
+            except:
+                self.fail('json.loads() failed')
+            self.assertIn('access_token', obj)
+            self.assertIn('token_type', obj)
+            self.assertIn('expires_in', obj)
+            self.assertIn('refresh_token', obj)
+            self.assertIn('scope', obj)
+            data = h_annot.api.refresh_oauth_token(obj['refresh_token'])
+            try:
+                obj = json.loads(data)
+            except:
+                self.fail('json.loads() failed')
+            self.assertIn('access_token', obj)
+            self.assertIn('token_type', obj)
+            self.assertIn('expires_in', obj)
+            self.assertIn('refresh_token', obj)
+            self.assertIn('scope', obj)
+        finally:
+            h_annot.api.server = orig_server
+        return
+
 # eof

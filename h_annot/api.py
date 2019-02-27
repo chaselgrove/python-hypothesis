@@ -79,4 +79,26 @@ def profile(auth):
         raise APIError(r)
     return r.text
 
+def oauth_token(client_id, client_secret, code):
+    url = '%s/api/token' % server
+    data = {'grant_type': 'authorization_code', 
+            'client_id': client_id, 
+            'client_secret': client_secret, 
+            'code': code}
+    r = requests.post(url, data=data)
+    return r.text
+
+def refresh_oauth_token(refresh_token):
+    url = '%s/api/token' % server
+    data = {'grant_type': 'refresh_token', 
+            'refresh_token': refresh_token}
+    r = requests.post(url, data=data)
+    return r.text
+
+def revoke_oauth(token):
+    url = '%s/oauth/revoke' % server
+    data = {'token': token}
+    requests.post(url, data=data)
+    return
+
 # eof
