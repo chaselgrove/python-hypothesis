@@ -31,7 +31,11 @@ test3 :
 	python3 -m unittest -vb tests
 
 clean : 
-	rm -f MANIFEST h_annot/*.pyc tests/*.pyc
+	rm -rf MANIFEST \
+           h_annot/*.pyc \
+           tests/*.pyc \
+           h_annot/__pycache__ \
+           tests/__pycache__
 
 clobber : clean
 	rm -rf dist
