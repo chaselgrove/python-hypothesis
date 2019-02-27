@@ -2,6 +2,7 @@ import unittest
 import json
 import h_annot.api
 from . import config
+from . import utils
 
 class TestAPI(unittest.TestCase):
 
@@ -71,11 +72,18 @@ class TestAPI(unittest.TestCase):
     @config.params('TestAPI:oauth_server', 
                    'TestAPI:oauth_client_id', 
                    'TestAPI:oauth_client_secret', 
-                   'TestAPI:oauth_code')
-    def test_oauth_flow(self, server, client_id, client_secret, code):
+                   'TestAPI:oauth_username', 
+                   'TestAPI:oauth_password')
+    def test_oauth_flow(self, 
+                        server, 
+                        client_id, 
+                        client_secret, 
+                        username, 
+                        password):
         try:
             orig_server = h_annot.api.server
             h_annot.api.server = server
+            code = utils.get_oauth_code(client_id, username, password)
             data = h_annot.api.oauth_token(client_id, client_secret, code)
             try:
                 obj = json.loads(data)
