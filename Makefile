@@ -38,7 +38,8 @@ clean :
            h_annot/*.pyc \
            tests/*.pyc \
            h_annot/__pycache__ \
-           tests/__pycache__
+           tests/__pycache__ \
+           build
 
 clobber : clean
 	rm -rf dist
