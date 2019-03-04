@@ -24,11 +24,7 @@ class TestOAuth(unittest.TestCase):
         self.assertEqual(client.auth_url(), 'https://hypothes.is/oauth/authorize?response_type=code&client_id=client12345')
         return
 
-    @config.params('TestAPI:oauth_server', 
-                   'TestAPI:oauth_client_id', 
-                   'TestAPI:oauth_client_secret', 
-                   'TestAPI:oauth_username', 
-                   'TestAPI:oauth_password')
+    @config.oauth_test
     def test_oauth_credentials(self, 
                                server, 
                                client_id, 

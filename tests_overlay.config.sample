@@ -4,8 +4,15 @@
 # The test suite reads parameters from tests.config.  If
 # PYTHON_HYPOTHESIS_TESTS_CONFIG is defined, the configuration from
 # that file is applied on top of tests.config (items can be added and
-# changed, but not removed).  This file is a sample overlay, describing
+# changed, but not removed).  This file is a sample overlay, noting 
 # all of the possible parameters needed by the test suite.
+
+[OAuth]
+server = http://localhost:5000
+client_id = 2fec875a-3ab9-11e9-8316-8f18e26ee062
+client_secret = 7fa5bdb63054f6c60c067ad17f0cf15e
+username = username
+password = password
 
 [TestAPI]
 
@@ -14,14 +21,6 @@
 # the given userid.
 auth_token = some-token
 userid = hypuserid
-
-# Test the OAuth flow.  This should be given OAuth client parameters 
-# and a username and password.
-oauth_server = http://localhost:5000
-oauth_client_id = 2fec875a-3ab9-11e9-8316-8f18e26ee062
-oauth_client_secret = 7fa5bdb63054f6c60c067ad17f0cf15e
-oauth_username = username
-oauth_password = password
 
 [TestAnnotation]
 

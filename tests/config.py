@@ -30,4 +30,10 @@ def params(*parameter_keys):
         return f2
     return decorator
 
+oauth_test = params('OAuth:server', 
+                    'OAuth:client_id', 
+                    'OAuth:client_secret', 
+                    'OAuth:username', 
+                    'OAuth:password')
+
 # eof

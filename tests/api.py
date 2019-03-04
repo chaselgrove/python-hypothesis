@@ -72,11 +72,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(obj['userid'], userid)
         return
 
-    @config.params('TestAPI:oauth_server', 
-                   'TestAPI:oauth_client_id', 
-                   'TestAPI:oauth_client_secret', 
-                   'TestAPI:oauth_username', 
-                   'TestAPI:oauth_password')
+    @config.oauth_test
     def test_oauth_flow(self, 
                         server, 
                         client_id, 
