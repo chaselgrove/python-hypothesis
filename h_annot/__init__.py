@@ -6,10 +6,10 @@ import six
 
 if six.PY2:
     from annotation import Annotation
-    import api
+    import api, oauth
 else:
     from .annotation import Annotation
-    from . import api
+    from . import api, oauth
 
 @contextlib.contextmanager
 def server(url):
