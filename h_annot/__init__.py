@@ -21,12 +21,6 @@ def server(url):
         api.server = orig_server
     return
 
-def get_oauth_url(client_id, state=None):
-    url = '%s/oauth/authorize?response_type=code&client_id=%s' % (api.server, client_id)
-    if state:
-        url = url + '&state=' + state
-    return url
-
 __version__ = '0.2.1'
 
 # eof

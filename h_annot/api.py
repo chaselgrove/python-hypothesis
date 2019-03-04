@@ -9,6 +9,12 @@ from .exceptions import *
 
 server = 'https://hypothes.is'
 
+def oauth_url(client_id, state=None):
+    url = '%s/oauth/authorize?response_type=code&client_id=%s' % (server, client_id)
+    if state:
+        url = url + '&state=' + state
+    return url
+
 def root():
     url = '%s/api' % server
     r = requests.get(url)

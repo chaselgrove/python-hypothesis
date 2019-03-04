@@ -14,7 +14,7 @@ import h_annot
 # at the time of writing and is therefore fragile to changes in the
 # Hypothesis server.
 def get_oauth_code(client_id, username, password):
-    url = h_annot.get_oauth_url(client_id)
+    url = h_annot.api.oauth_url(client_id)
     with requests.Session() as s:
         response = s.get(url)
         data = {'__formid__': (None, 'deform'),
