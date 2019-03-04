@@ -9,9 +9,9 @@ except ImportError:
 
 config = configparser.ConfigParser()
 try:
-    config.read(['tests.config', os.environ['PYTHON_HYPOTHESIS_TESTS_CONFIG']])
+    config.read(os.environ['PYTHON_HYPOTHESIS_TESTS_CONFIG'])
 except KeyError:
-    config.read(['tests.config'])
+    config.read('tests.config')
 
 def get(test_case, key):
     (section, option) = key.split(':')
