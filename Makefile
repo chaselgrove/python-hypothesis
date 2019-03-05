@@ -33,6 +33,12 @@ test :
 test3 : 
 	python3 -m unittest -vb tests
 
+ctest : 
+	PYTHON_HYPOTHESIS_TESTS_CONFIG=ctests.config python -m unittest -vb tests
+
+ctest3 : 
+	PYTHON_HYPOTHESIS_TESTS_CONFIG=ctests.config python3 -m unittest -vb tests
+
 clean : 
 	rm -rf MANIFEST \
            h_annot/*.pyc \
