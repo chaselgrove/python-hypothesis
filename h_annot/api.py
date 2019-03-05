@@ -4,7 +4,6 @@
 import six
 import urllib
 import requests
-
 from .exceptions import *
 
 server = 'https://hypothes.is'
