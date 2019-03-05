@@ -8,7 +8,7 @@ from setuptools import setup
 long_description = open('README.rst').read()
 
 setup(name='python-hypothesis', 
-      version='0.2.1', 
+      version='0.3.0', 
       description='Python library for the Hypothes.is API', 
       author='Christian Haselgrove', 
       author_email='christian.haselgrove@umassmed.edu', 
