@@ -6,6 +6,7 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
+import h_annot
 
 config = configparser.ConfigParser()
 try:
@@ -30,10 +31,22 @@ def params(*parameter_keys):
         return f2
     return decorator
 
-oauth_test = params('OAuth:server', 
-                    'OAuth:client_id', 
+oauth_test = params('OAuth:client_id', 
                     'OAuth:client_secret', 
                     'OAuth:username', 
                     'OAuth:password')
+
+def server_test(f):
+    """applies General:server from the configuration file to the decorated 
+    test
+    """
+    try:
+        server = config.get('General', 'server')
+    except (configparser.NoSectionError, configparser.NoOptionError):
+        return f
+    def f2(test_case, *args, **kwargs):
+        with h_annot.server(server):
+            return f(test_case, *args, **kwargs)
+    return f2
 
 # eof

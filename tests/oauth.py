@@ -24,18 +24,17 @@ class TestOAuth(unittest.TestCase):
         self.assertEqual(client.auth_url(), 'https://hypothes.is/oauth/authorize?response_type=code&client_id=client12345')
         return
 
+    @config.server_test
     @config.oauth_test
     def test_oauth_credentials(self, 
-                               server, 
                                client_id, 
                                client_secret, 
                                username, 
                                password):
         client = h_annot.oauth.OAuthClient(client_id, client_secret)
-        with h_annot.server(server):
-            code = utils.get_oauth_code(client_id, username, password)
-            creds = client.get_credentials(code)
-            self.assertIsInstance(creds, h_annot.oauth.OAuthCredentials)
+        code = utils.get_oauth_code(client_id, username, password)
+        creds = client.get_credentials(code)
+        self.assertIsInstance(creds, h_annot.oauth.OAuthCredentials)
         return
 
 # eof

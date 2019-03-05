@@ -8,11 +8,13 @@ from . import config
 
 class TestAnnotation(unittest.TestCase):
 
+    @config.server_test
     @config.params('TestAnnotation:annotation_id')
     def test_read(self, annotation_id):
         annot = h_annot.Annotation.load(annotation_id)
         self.assertIsInstance(annot, h_annot.Annotation)
 
+    @config.server_test
     def test_not_found(self):
         regexp = 'API call returned 404 \(Not Found\)'
         self.assertRaises(KeyError, 
@@ -20,14 +22,15 @@ class TestAnnotation(unittest.TestCase):
                           'bogusannotationid')
         return
 
-    def test_search(self):
+    @config.server_test
+    @config.params('TestAnnotation:search_tag', 'TestAnnotation:search_uri')
+    def test_search(self, tag, uri):
         annots = h_annot.Annotation.search(limit=2, 
                                            sort='updated', 
                                            order='asc', 
-                                           tag='PythonHypothesis')
+                                           tag=tag)
         self.assertGreaterEqual(len(annots), 2)
         self.assertIsInstance(annots[0], h_annot.Annotation)
-        uri = 'https://github.com/chaselgrove/python-hypothesis'
         self.assertEqual(annots[0].uri, uri)
         return
 
