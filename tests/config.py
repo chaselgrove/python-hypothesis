@@ -31,10 +31,17 @@ def params(*parameter_keys):
         return f2
     return decorator
 
-oauth_test = params('OAuth:client_id', 
-                    'OAuth:client_secret', 
-                    'OAuth:username', 
-                    'OAuth:password')
+def oauth_test(f):
+    def f2(test_case):
+        client_id = get(test_case, 'OAuth:client_id')
+        username = get(test_case, 'OAuth:username')
+        password = get(test_case, 'OAuth:password')
+        try:
+            client_secret = config.get('OAuth', 'client_secret')
+        except (configparser.NoSectionError, configparser.NoOptionError):
+            client_secret = None
+        return f(test_case, client_id, client_secret, username, password)
+    return f2
 
 def server_test(f):
     """applies General:server from the configuration file to the decorated 
