@@ -84,12 +84,14 @@ def profile(auth):
         raise APIError(r)
     return r.text
 
-def oauth_token(client_id, client_secret, code):
+def oauth_token(client_id, client_secret=None, code=None):
     url = '%s/api/token' % server
     data = {'grant_type': 'authorization_code', 
-            'client_id': client_id, 
-            'client_secret': client_secret, 
-            'code': code}
+            'client_id': client_id}
+    if client_secret is not None:
+        data['client_secret'] = client_secret
+    if code is not None:
+        data['code'] = code
     r = requests.post(url, data=data)
     return r.text
 
