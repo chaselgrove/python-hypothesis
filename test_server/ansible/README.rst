@@ -1,8 +1,8 @@
 .. See file COPYING distributed with python-hypothesis for copyright and 
    license.
 
-Test server
-===========
+Test server -- Ansible
+======================
 
 This directory contains an Ansible playbook for setting up a test
 Hypothesis server.  The code and instructions follow the `dev server
