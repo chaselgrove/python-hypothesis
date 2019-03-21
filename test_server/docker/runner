@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# See file COPYING distributed with python-hypothesis for copyright and 
+# license.
+
+eth0_address=`ip address show dev eth0 \
+                | grep inet \
+                | tr / ' ' \
+                | awk '{print $2}'`
+
+socat tcp-listen:5432,fork tcp:postgres:5432 &
+socat tcp-listen:5672,fork tcp:rabbit:5672 &
+socat tcp-listen:15672,fork tcp:rabbit:15672 &
+socat tcp-listen:9200,fork tcp:elasticsearch:9200 &
+socat tcp-listen:5000,fork,bind=$eth0_address tcp:localhost:5000 &
+
+git clone https://github.com/hypothesis/h.git
+cd h
+make dev
+
+exit $?
+
+# eof
