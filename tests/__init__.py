@@ -4,6 +4,7 @@
 from .basic import *
 from .api import *
 from .annotation import *
+from .search import *
 from .oauth import *
 
 # eof

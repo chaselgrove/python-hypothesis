@@ -11,7 +11,10 @@ class Annotation(object):
 
     def __init__(self, auth, data):
         self._auth = auth
-        self._set_from_json(data)
+        if isinstance(data, dict):
+            self._dict = data
+        else:
+            self._set_from_json(data)
         return
 
     def __str__(self):
@@ -155,5 +158,36 @@ class TagSet:
         tags.append(tag)
         self.set(tags)
         return
+
+def search(auth, uri=None, user=None, tags=None, quote=None, text=None):
+    """Search for annotations.
+
+    Returns a list of annotations.
+
+    Supported arguments:
+
+        uri
+        user
+        tags
+
+    Currently limits the number of returned annotations to 200.
+    """
+    search_args = {'sort': 'id', 'order': 'asc', 'limit': 200}
+    if uri is not None:
+        if not isinstance(uri, six.string_types):
+            raise TypeError('uri must be a string')
+        search_args['uri'] = uri
+    if user is not None:
+        if not isinstance(user, six.string_types):
+            raise TypeError('user must be a string')
+        search_args['user'] = user
+    if tags is not None:
+        if not isinstance(tags, list):
+            raise TypeError('tags must be a list of strings')
+        if not all(isinstance(tag, six.string_types) for tag in tags):
+            raise TypeError('tags must be a list of strings')
+        search_args['tags'] = '[%s]' % ','.join(tags)
+    data = json.loads(api.search(auth, **search_args))
+    return [ Annotation(auth, row) for row in data['rows'] ]
 
 # eof
