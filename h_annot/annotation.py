@@ -159,7 +159,7 @@ class TagSet:
         self.set(tags)
         return
 
-def search(auth, uri=None, user=None, tags=None, quote=None, text=None):
+def search(uri=None, user=None, tags=None, quote=None, text=None, auth=None):
     """Search for annotations.
 
     Returns a list of annotations.

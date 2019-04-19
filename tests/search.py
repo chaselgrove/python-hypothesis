@@ -15,7 +15,7 @@ import h_annot
 class TestSearch(unittest.TestCase):
 
     def test_search(self):
-        annotations = h_annot.annotation.search(None)
+        annotations = h_annot.annotation.search()
         self.assertIsInstance(annotations, list)
         self.assertEqual(len(annotations), 200)
         annot_types_okay = [ isinstance(a, h_annot.annotation.Annotation) 
@@ -27,7 +27,7 @@ class TestSearchUser(unittest.TestCase):
 
     def setUp(self):
         self.user = 'acct:chaselgrove@hypothes.is'
-        self.annotations = h_annot.annotation.search(None, user=self.user)
+        self.annotations = h_annot.annotation.search(user=self.user)
         assert len(self.annotations) > 0, \
                 'no annotations for user %s found' % self.user
         return
@@ -40,7 +40,7 @@ class TestSearchURI(unittest.TestCase):
 
     def setUp(self):
         self.uri = 'https://web.hypothes.is'
-        self.annotations = h_annot.annotation.search(None, uri=self.uri)
+        self.annotations = h_annot.annotation.search(uri=self.uri)
         assert len(self.annotations) > 0, \
                 'no annotations for URI %s found' % self.uri
         return
@@ -55,7 +55,7 @@ class TestSearchTags(unittest.TestCase):
 
     def setUp(self):
         self.tag = 'APITest'
-        self.annotations = h_annot.annotation.search(None, tags=[self.tag])
+        self.annotations = h_annot.annotation.search(tags=[self.tag])
         assert len(self.annotations) > 0, \
                 'no annotations for tag %s found' % self.tag
         return
