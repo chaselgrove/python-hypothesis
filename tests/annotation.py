@@ -18,7 +18,6 @@ class TestAnnotation(unittest.TestCase):
 
     @config.server_test
     def test_not_found(self):
-        regexp = 'API call returned 404 \(Not Found\)'
         self.assertRaises(KeyError, 
                           h_annot.Annotation.load, 
                           'bogusannotationid')
