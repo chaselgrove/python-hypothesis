@@ -163,6 +163,17 @@ class TagSet:
         self.set(tags)
         return
 
+    def remove(self, tag):
+        if tag not in self:
+            raise KeyError(tag)
+        tags = list(self)
+        for t in tags:
+            if t.lower() == tag.lower():
+                tags.remove(t)
+                break
+        self.set(tags)
+        return
+
 def search(uri=None, user=None, tags=None, quote=None, text=None, auth=None):
     """Search for annotations.
 
