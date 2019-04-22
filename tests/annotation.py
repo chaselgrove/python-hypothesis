@@ -15,6 +15,12 @@ class TestAnnotation(unittest.TestCase):
     def test_read(self, annotation_id):
         annot = h_annot.Annotation.load(annotation_id)
         self.assertIsInstance(annot, h_annot.Annotation)
+        self.assertEqual(annot.text, 'I\'m imagining!')
+        self.assertEqual(annot.uri, \
+                         'https://github.com/chaselgrove/python-hypothesis')
+        self.assertIn('TestTag', annot.tags)
+        self.assertIn('TestTag2', annot.tags)
+        return
 
     @config.server_test
     def test_not_found(self):
