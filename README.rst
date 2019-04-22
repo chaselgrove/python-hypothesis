@@ -26,8 +26,8 @@ The contents of this module reflect the REST nature of the API:
 
 Examples:
 
-    >>> h_annot.api.read(None, 'v8Y0ix_lSRmDnEKhNr19eQ')
-    u'{"updated": "2013-08-14T19:21:19.917589+00:00", "group": "__world__", ...
+    >>> h_annot.api.read(None, '53LMZGVCEemN4zOvm3oFEQ')
+    u'{"updated": "2019-04-22T21:09:23.352503+00:00", "group": "__world__", ...
 
     >>> h_annot.api.read(None, 'bogusannotationid')
     Traceback (most recent call last):
@@ -41,7 +41,7 @@ High-level access
 
 The Annotation class is an object abstraction of an annotation.  Use the ``load()`` class method to get an annotation from its ID:
 
-    >>> annot = h_annot.Annotation.load('v8Y0ix_lSRmDnEKhNr19eQ')
+    >>> annot = h_annot.Annotation.load('53LMZGVCEemN4zOvm3oFEQ')
     >>> annot.text
     u"I'm imagining!!!"
 
