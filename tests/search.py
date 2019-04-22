@@ -7,7 +7,7 @@
 # filter has been applied properly, so we consider this an error because 
 # the test can't do its job.  (We choose to trigger an error rather than 
 # to skip the test so the problem is clear in the test output.)  These 
-# errors are triggered by the assertions in the setUp()s.
+# errors are triggered by the exceptions in the setUp()s.
 
 import unittest
 import h_annot
@@ -28,8 +28,8 @@ class TestSearchUser(unittest.TestCase):
     def setUp(self):
         self.user = 'acct:chaselgrove@hypothes.is'
         self.annotations = h_annot.annotation.search(user=self.user)
-        assert len(self.annotations) > 0, \
-                'no annotations for user %s found' % self.user
+        if len(self.annotations) == 0:
+            raise ValueError('no annotations for user %s found' % self.user)
         return
 
     def test_search_user(self):
@@ -41,8 +41,8 @@ class TestSearchURI(unittest.TestCase):
     def setUp(self):
         self.uri = 'https://web.hypothes.is'
         self.annotations = h_annot.annotation.search(uri=self.uri)
-        assert len(self.annotations) > 0, \
-                'no annotations for URI %s found' % self.uri
+        if len(self.annotations) == 0:
+            raise ValueError('no annotations for URI %s found' % self.uri)
         return
 
     def test_search_uri(self):
@@ -56,8 +56,8 @@ class TestSearchTags(unittest.TestCase):
     def setUp(self):
         self.tag = 'APITest'
         self.annotations = h_annot.annotation.search(tags=[self.tag])
-        assert len(self.annotations) > 0, \
-                'no annotations for tag %s found' % self.tag
+        if len(self.annotations) == 0:
+            raise ValueError('no annotations for tag %s found' % self.tag)
         return
 
     def test_search_tags(self):
