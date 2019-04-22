@@ -52,4 +52,46 @@ class TestAnnotation(unittest.TestCase):
             self.assertTrue(issubclass(w[0].category, DeprecationWarning))
         return
 
+class TestEdits(unittest.TestCase):
+
+    @config.server_test
+    @config.params('TestEdit:auth_token', 'TestEdit:annot_id')
+    def setUp(self, auth_token, annot_id):
+        self.auth_token = auth_token
+        self.annot_id = annot_id
+        self.annotation = h_annot.Annotation.load(self.annot_id, 
+                                                  self.auth_token)
+        if 'test text' in self.annotation.text:
+            raise ValueError('"test text" is in the test annotation')
+        if 'TestTag' in self.annotation.tags:
+            raise ValueError('TestTag is in the test annotation tags')
+        self.orig_text = self.annotation.text
+        return
+
+    def tearDown(self):
+        self.annotation.text = self.orig_text
+        if 'TestTag' in self.annotation.tags:
+            self.annotation.tags.remove('TestTag')
+        return
+
+    def test_text(self):
+        self.annotation.text = self.orig_text + '\n' + 'test text'
+        self.assertIn('test text', self.annotation.text)
+        reloaded_annotation = h_annot.Annotation.load(self.annot_id)
+        self.assertIn('test text', reloaded_annotation.text)
+        return
+
+    def test_tags(self):
+        self.assertNotIn('TestTag', self.annotation.tags)
+        self.annotation.tags.add('TestTag')
+        self.assertIn('TestTag', self.annotation.tags)
+        reloaded_annotation = h_annot.Annotation.load(self.annot_id)
+        self.assertIn('TestTag', reloaded_annotation.tags)
+        self.annotation.tags.remove('TestTag')
+        self.assertNotIn('TestTag', self.annotation.tags)
+        reloaded_annotation = h_annot.Annotation.load(self.annot_id)
+        self.assertNotIn('TestTag', reloaded_annotation.tags)
+        self.assertRaises(KeyError, self.annotation.tags.remove, 'TestTag')
+        return
+
 # eof
