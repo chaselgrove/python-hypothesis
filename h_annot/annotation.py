@@ -4,6 +4,7 @@
 import six
 import json
 import dateutil.parser
+import warnings
 from . import api
 from .exceptions import *
 
@@ -104,6 +105,9 @@ class Annotation(object):
 
     @classmethod
     def search(cls, auth=None, **kwargs):
+        msg = 'Annotation.search() is deprecated.  Use ' + \
+              'annotation.search() or api.seach() instead.'
+        warnings.warn(msg, DeprecationWarning)
         data = api.search(auth, **kwargs)
         obj = json.loads(data)
         rv = [ cls(auth, json.dumps(row)) for row in obj['rows'] ]
