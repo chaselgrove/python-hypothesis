@@ -5,10 +5,10 @@ import contextlib
 import six
 
 if six.PY2:
-    from annotation import Annotation
+    from annotation import Annotation, search
     import api, oauth
 else:
-    from .annotation import Annotation
+    from .annotation import Annotation, search
     from . import api, oauth
 
 @contextlib.contextmanager
