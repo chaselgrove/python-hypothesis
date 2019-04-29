@@ -174,7 +174,7 @@ class TagSet:
         self.set(tags)
         return
 
-def search(uri=None, user=None, tags=None, quote=None, text=None, auth=None):
+def search(uri=None, user=None, tags=None, text=None, auth=None):
     """Search for annotations.
 
     Returns a list of annotations.
@@ -184,6 +184,7 @@ def search(uri=None, user=None, tags=None, quote=None, text=None, auth=None):
         uri
         user
         tags
+        text
 
     Currently limits the number of returned annotations to 200.
     """
@@ -202,6 +203,10 @@ def search(uri=None, user=None, tags=None, quote=None, text=None, auth=None):
         if not all(isinstance(tag, six.string_types) for tag in tags):
             raise TypeError('tags must be a list of strings')
         search_args['tags'] = '[%s]' % ','.join(tags)
+    if text is not None:
+        if not isinstance(text, six.string_types):
+            raise TypeError('text must be a string')
+        search_args['text'] = '"%s"' % text
     data = json.loads(api.search(auth, **search_args))
     return [ Annotation(auth, row) for row in data['rows'] ]
 

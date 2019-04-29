@@ -65,4 +65,18 @@ class TestSearchTags(unittest.TestCase):
         self.assertTrue(all(tags_okay))
         return
 
+class TestSearchText(unittest.TestCase):
+
+    def setUp(self):
+        self.text = 'imagining'
+        self.annotations = h_annot.annotation.search(text=self.text)
+        if len(self.annotations) == 0:
+            raise ValueError('no annotations for tag %s found' % self.tag)
+        return
+
+    def test_search_tags(self):
+        text_okay = [ self.text in a.text.lower() for a in self.annotations ]
+        self.assertTrue(all(text_okay))
+        return
+
 # eof
