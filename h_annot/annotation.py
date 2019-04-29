@@ -8,6 +8,8 @@ import warnings
 from . import api
 from .exceptions import *
 
+auth = None
+
 class Annotation(object):
 
     def __init__(self, auth, data):
@@ -27,7 +29,13 @@ class Annotation(object):
 
     def _update(self, new_dict):
         data_in = json.dumps(new_dict)
-        data_out = api.update(self._auth, self.id, data_in)
+        if auth:
+            data_out = api.update(auth, self.id, data_in)
+        else:
+            msg = 'Updating annotations without the authorization ' + \
+                  'context manager (h_annot.auth()) is deprecated.'
+            warnings.warn(msg, DeprecationWarning)
+            data_out = api.update(self._auth, self.id, data_in)
         self._set_from_json(data_out)
         return
 
@@ -74,7 +82,7 @@ class Annotation(object):
 
     @text.setter
     def text(self, value):
-        if self._auth is None:
+        if self._auth is None and auth is None:
             raise AttributeError('can\'t set attribute (no authorization)')
         new_dict = dict(self._dict)
         new_dict['text'] = value
@@ -145,7 +153,7 @@ class TagSet:
         return False
 
     def set(self, tags):
-        if self._annotation._auth is None:
+        if self._annotation._auth is None and auth is None:
             raise AttributeError('can\'t set attribute (no authorization)')
         if not isinstance(tags, (tuple, list)):
             msg = 'direct assignment to tags must be from a tuple or list'

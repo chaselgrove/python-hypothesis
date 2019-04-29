@@ -21,6 +21,16 @@ def server(url):
         api.server = orig_server
     return
 
+@contextlib.contextmanager
+def auth(url):
+    orig_auth = annotation.auth
+    annotation.auth = url
+    try:
+        yield
+    finally:
+        annotation.auth = orig_auth
+    return
+
 __version__ = '0.3.0'
 
 # eof
