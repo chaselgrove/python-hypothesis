@@ -56,10 +56,17 @@ Exceptions are more pythonic:
 
 The Annotation constructor should not be called directly.
 
-Some attributes can be updated, but you must declare your developer key to the annotation when you create it:
+Some attributes can be updated; to do so, set the authentication token using the ``h_annot.auth()`` context manager:
+
+    >>> with h_annot.auth(authentication_token):
+    ...     annot.text = 'new text'
+
+Annotations don't have an inherent concept of authentication, so the previous way of declaring authentication to annotations:
 
     >>> annot = h_annot.Annotation.load('someannotationid', 'somedevelkey')
     >>> annot.text = 'new text'
+
+is deprecated.
 
 Tags are accessed and changed through the ``tags`` attribute.  This attribute acts like a case-insensitive set (like Hypothesis itself treats tags).
 
@@ -67,9 +74,15 @@ Tags are accessed and changed through the ``tags`` attribute.  This attribute ac
     TagSet(objectives, interwebs)
 
     >>> for tag in annot.tags:
-    ... print tag
+    ...     print tag
     objectives
     interwebs
 
-    >>> annot.tags = ['all', 'new', 'tags']
-    >>> annot.tags.add('and one more')
+    >>> with h_annot.auth(authentication_token):
+    ...     annot.tags = ['all', 'new', 'tags']
+    ...     annot.tags.add('and one more')
+    ...     annot.tags.remove('new')
+
+Searching via ``Annotation.search()`` is deprecated.  This search just wrapped the results of ``api.search()`` in Annotation constructors, so ``api.search()`` should now be used for searches that used ``Annotation.search()``.  For a high-level search interface, use ``h_annot.search()``.  This takes keyword arguments ``uri``, ``user``, ``tags``, and ``text``.  Note that ``tags`` are joined by AND and separate words in ``text`` are joined by OR, which is the behavior of the `Hypothesis search API`_.  ``h_annot.search()`` respects the authentication set by the ``h_annot.auth()`` context manager.
+
+.. _Hypothesis search API: https://h.readthedocs.io/en/latest/api-reference/#tag/annotations/paths/~1search/get
