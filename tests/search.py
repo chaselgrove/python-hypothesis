@@ -141,4 +141,42 @@ class TestSearchResults(unittest.TestCase):
         self.assertEqual(len(annotation_ids), 250)
         return
 
+class TestSearchOrdering(unittest.TestCase):
+
+    # we don't bother with all of the possible orderings, just enough to 
+    # make sure both sort and order are passed through properly (and we check 
+    # 250 results and their ids to make sure SearchResults is behaving as 
+    # well)
+
+    def setUp(self):
+        self.id_asc_results = h_annot.search(sort='id', order='asc')
+        self.created_desc_results = h_annot.search(sort='created', order='desc')
+        self.id_asc_annotations = list(itertools.islice(self.id_asc_results, 250))
+        self.created_desc_annotations = list(itertools.islice(self.created_desc_results, 250))
+        if len(self.id_asc_annotations) != 250:
+            raise ValueError('unexpected number of results')
+        if len(self.created_desc_annotations) != 250:
+            raise ValueError('unexpected number of results')
+        return
+
+    def test_id_asc_order(self):
+        last_id = None
+        for annot in self.id_asc_annotations:
+            if last_id is not None:
+                self.assertGreater(annot.id, last_id)
+            last_id = annot.id
+        ids = set(annot.id for annot in self.id_asc_annotations)
+        self.assertEqual(len(ids), 250)
+        return
+
+    def test_created_desc_order(self):
+        last_created = None
+        for annot in self.created_desc_annotations:
+            if last_created is not None:
+                self.assertLess(annot.created, last_created)
+            last_created = annot.created
+        ids = set(annot.id for annot in self.created_desc_annotations)
+        self.assertEqual(len(ids), 250)
+        return
+
 # eof

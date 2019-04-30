@@ -203,9 +203,12 @@ class SearchResults:
         self.total = self.data['total']
         return
 
-    def _search(self, after=None):
+    def _search(self, first=True):
         search_args = dict(self.initial_search_args)
-        if after:
+        if not first:
+            time.sleep(1)
+            sort_field = self.initial_search_args['sort']
+            after = self.data['rows'][-1][sort_field]
             search_args['search_after'] = after
         search_args['limit'] = 200
         self.data = json.loads(api.search(self.auth, **search_args))
@@ -221,8 +224,7 @@ class SearchResults:
 
     def __next__(self):
         if self.index == 200:
-            time.sleep(1)
-            self._search(after=self.data['rows'][-1]['updated'])
+            self._search(False)
             self.index = 0
         if self.index >= len(self.data['rows']):
             raise StopIteration
@@ -232,7 +234,7 @@ class SearchResults:
 
     next = __next__
 
-def search(uri=None, user=None, tags=None, text=None, auth=None):
+def search(uri=None, user=None, tags=None, text=None, sort='updated', order='desc', auth=None):
     """Search for annotations.
 
     Returns a SearchResults object.
@@ -244,7 +246,7 @@ def search(uri=None, user=None, tags=None, text=None, auth=None):
         tags
         text
     """
-    search_args = {'sort': 'updated', 'order': 'desc'}
+    search_args = {}
     if uri is not None:
         if not isinstance(uri, six.string_types):
             raise TypeError('uri must be a string')
@@ -263,6 +265,16 @@ def search(uri=None, user=None, tags=None, text=None, auth=None):
         if not isinstance(text, six.string_types):
             raise TypeError('text must be a string')
         search_args['text'] = '"%s"' % text
+    if not isinstance(sort, six.string_types):
+        raise TypeError('sort must be a string')
+    if sort not in ('created', 'updated', 'group', 'id', 'user'):
+        raise ValueError('bad value for sort')
+    search_args['sort'] = sort
+    if not isinstance(order, six.string_types):
+        raise TypeError('order must be a string')
+    if order not in ('asc', 'desc'):
+        raise ValueError('bad value for order')
+    search_args['order'] = order
     if auth is None:
         auth = cm_auth
     search_args['auth'] = auth
