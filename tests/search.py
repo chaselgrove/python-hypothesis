@@ -9,20 +9,10 @@
 # to skip the test so the problem is clear in the test output.)  These 
 # errors are triggered by the exceptions in the setUp()s.
 
+import itertools
 import unittest
-import h_annot
+import h_annot.annotation
 from . import config
-
-class TestSearch(unittest.TestCase):
-
-    def test_search(self):
-        annotations = h_annot.annotation.search()
-        self.assertIsInstance(annotations, list)
-        self.assertEqual(len(annotations), 200)
-        annot_types_okay = [ isinstance(a, h_annot.annotation.Annotation) 
-                             for a in annotations ]
-        self.assertTrue(all(annot_types_okay))
-        return
 
 class TestSearchUser(unittest.TestCase):
 
@@ -99,6 +89,56 @@ class TestAuthenticatedSearch(unittest.TestCase):
     def test_authenticated_search(self):
         text_matches = [ self.text in a.text for a in self.annotations ]
         self.assertTrue(any(text_matches))
+        return
+
+class TestSearchResults(unittest.TestCase):
+
+    def setUp(self):
+        self.no_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', text='this_annotation_should_not_exist', user='chaselgrove')
+        self.some_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', user='chaselgrove')
+        self.all_results = h_annot.search()
+        return
+
+    def test_type(self):
+        self.assertIsInstance(self.no_results, h_annot.annotation.SearchResults)
+        self.assertIsInstance(self.some_results, h_annot.annotation.SearchResults)
+        self.assertIsInstance(self.all_results, h_annot.annotation.SearchResults)
+        return
+
+    def test_len(self):
+        self.assertEqual(len(self.no_results), 0)
+        self.assertGreater(len(self.some_results), 0)
+        self.assertLess(len(self.some_results), 10)
+        self.assertGreater(len(self.all_results), 100000)
+        return
+
+    def test_iteration(self):
+        # catch non-empty no_results and some_results here -- we don't really 
+        # want to be iterating over all of the results if something goes 
+        # wrong and there are thousands
+        if len(self.no_results) != 0:
+            raise ValueError('results found in no_results')
+        if len(self.some_results) > 10:
+            msg = 'more results than expected found in some_results'
+            raise ValueError(msg)
+        try:
+            no_results_list = list(self.no_results)
+            some_results_list = list(self.some_results)
+        except Exception as exc:
+            self.fail('list() failed on search results: %s' % exc)
+        self.assertEqual(len(no_results_list), 0)
+        self.assertEqual(len(some_results_list), len(self.some_results))
+        annotation_checks = [ isinstance(res, h_annot.annotation.Annotation) 
+                              for res in some_results_list ]
+        self.assertTrue(all(annotation_checks))
+        first_250_list = list(itertools.islice(self.all_results, 250))
+        self.assertEqual(len(first_250_list), 250)
+        annotation_checks = [ isinstance(res, h_annot.annotation.Annotation) 
+                              for res in first_250_list ]
+        self.assertTrue(all(annotation_checks))
+        # make sure we really get new results, not duplicates
+        annotation_ids = set(a.id for a in first_250_list)
+        self.assertEqual(len(annotation_ids), 250)
         return
 
 # eof

@@ -3,6 +3,7 @@
 
 import six
 import json
+import time
 import dateutil.parser
 import warnings
 from . import api
@@ -188,10 +189,53 @@ class TagSet:
         self.set(tags)
         return
 
+class SearchResults:
+
+    def __init__(self, **kwargs):
+        try:
+            self.auth = kwargs['auth']
+            del kwargs['auth']
+        except KeyError:
+            self.auth = None
+        self.initial_search_args = kwargs
+        self._search()
+        self.initial_data = self.data
+        self.total = self.data['total']
+        return
+
+    def _search(self, after=None):
+        search_args = dict(self.initial_search_args)
+        if after:
+            search_args['search_after'] = after
+        search_args['limit'] = 200
+        self.data = json.loads(api.search(self.auth, **search_args))
+        return
+
+    def __len__(self):
+        return self.total
+
+    def __iter__(self):
+        self.data = self.initial_data
+        self.index = 0
+        return self
+
+    def __next__(self):
+        if self.index == 200:
+            time.sleep(1)
+            self._search(after=self.data['rows'][-1]['updated'])
+            self.index = 0
+        if self.index >= len(self.data['rows']):
+            raise StopIteration
+        annot = Annotation(None, self.data['rows'][self.index])
+        self.index += 1
+        return annot
+
+    next = __next__
+
 def search(uri=None, user=None, tags=None, text=None, auth=None):
     """Search for annotations.
 
-    Returns a list of annotations.
+    Returns a SearchResults object.
 
     Supported arguments:
 
@@ -199,10 +243,8 @@ def search(uri=None, user=None, tags=None, text=None, auth=None):
         user
         tags
         text
-
-    Currently limits the number of returned annotations to 200.
     """
-    search_args = {'sort': 'id', 'order': 'asc', 'limit': 200}
+    search_args = {'sort': 'updated', 'order': 'desc'}
     if uri is not None:
         if not isinstance(uri, six.string_types):
             raise TypeError('uri must be a string')
@@ -223,7 +265,7 @@ def search(uri=None, user=None, tags=None, text=None, auth=None):
         search_args['text'] = '"%s"' % text
     if auth is None:
         auth = cm_auth
-    data = json.loads(api.search(auth, **search_args))
-    return [ Annotation(None, row) for row in data['rows'] ]
+    search_args['auth'] = auth
+    return SearchResults(**search_args)
 
 # eof
