@@ -10,6 +10,7 @@
 # errors are triggered by the exceptions in the setUp()s.
 
 import itertools
+import dateutil.parser
 import unittest
 import h_annot.annotation
 from . import config
@@ -176,6 +177,28 @@ class TestSearchOrdering(unittest.TestCase):
                 self.assertLess(annot.created, last_created)
             last_created = annot.created
         ids = set(annot.id for annot in self.created_desc_annotations)
+        self.assertEqual(len(ids), 250)
+        return
+
+class TestSearchAfter(unittest.TestCase):
+
+    # since SearchResults uses after internally, we check 250 results and 
+    # check for unique IDs to make sure SearchResults is paging correctly
+
+    def setUp(self):
+        self.cutoff = dateutil.parser.parse('2016-01-01T00:00:00.000000+00:00')
+        self.results = h_annot.search(sort='created', 
+                                      order='asc', 
+                                      after=self.cutoff)
+        self.results_list = list(itertools.islice(self.results, 250))
+        if len(self.results_list) != 250:
+            raise ValueError('unexpected number of results')
+        return
+
+    def test_after(self):
+        for annot in self.results_list:
+            self.assertGreater(annot.created, self.cutoff)
+        ids = set(annot.id for annot in self.results_list)
         self.assertEqual(len(ids), 250)
         return
 

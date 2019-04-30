@@ -4,6 +4,7 @@
 import six
 import json
 import time
+import datetime
 import dateutil.parser
 import warnings
 from . import api
@@ -234,7 +235,7 @@ class SearchResults:
 
     next = __next__
 
-def search(uri=None, user=None, tags=None, text=None, sort='updated', order='desc', auth=None):
+def search(uri=None, user=None, tags=None, text=None, sort='updated', order='desc', after=None, auth=None):
     """Search for annotations.
 
     Returns a SearchResults object.
@@ -245,6 +246,8 @@ def search(uri=None, user=None, tags=None, text=None, sort='updated', order='des
         user
         tags
         text
+
+    sort, order, and after (for search_after) are also supported.
     """
     search_args = {}
     if uri is not None:
@@ -275,6 +278,15 @@ def search(uri=None, user=None, tags=None, text=None, sort='updated', order='des
     if order not in ('asc', 'desc'):
         raise ValueError('bad value for order')
     search_args['order'] = order
+    if after is not None:
+        if sort in ('group', 'id', 'user'):
+            if not isinstance(after, six.string_types):
+                raise TypeError('after must be a string for %s sorting' % sort)
+        else:
+            if not isinstance(after, datetime.datetime):
+                msg = 'after must be a datetime instance for %s sorting' % sort
+                raise TypeError(msg)
+        search_args['search_after'] = after
     if auth is None:
         auth = cm_auth
     search_args['auth'] = auth
