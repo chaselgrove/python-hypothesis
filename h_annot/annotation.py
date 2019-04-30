@@ -8,7 +8,7 @@ import warnings
 from . import api
 from .exceptions import *
 
-auth = None
+cm_auth = None
 
 class Annotation(object):
 
@@ -29,8 +29,8 @@ class Annotation(object):
 
     def _update(self, new_dict):
         data_in = json.dumps(new_dict)
-        if auth:
-            data_out = api.update(auth, self.id, data_in)
+        if cm_auth:
+            data_out = api.update(cm_auth, self.id, data_in)
         else:
             msg = 'Updating annotations without the authorization ' + \
                   'context manager (h_annot.auth()) is deprecated.'
@@ -82,7 +82,7 @@ class Annotation(object):
 
     @text.setter
     def text(self, value):
-        if self._auth is None and auth is None:
+        if self._auth is None and cm_auth is None:
             raise AttributeError('can\'t set attribute (no authorization)')
         new_dict = dict(self._dict)
         new_dict['text'] = value
@@ -102,22 +102,24 @@ class Annotation(object):
         return self._dict['user']
 
     @classmethod
-    def load(cls, annot_id, load_auth=None):
-        if load_auth is None:
-            load_auth = auth
+    def load(cls, annot_id, auth=None):
+        if auth is None:
+            auth = cm_auth
         try:
-            data = api.read(load_auth, annot_id)
+            data = api.read(auth, annot_id)
         except APIError as data:
             if data.response.status_code == 404:
                 raise KeyError('annotation ID %s not found' % annot_id)
             raise
-        return cls(load_auth, data)
+        return cls(auth, data)
 
     @classmethod
     def search(cls, auth=None, **kwargs):
         msg = 'Annotation.search() is deprecated.  Use ' + \
               'annotation.search() or api.seach() instead.'
         warnings.warn(msg, DeprecationWarning)
+        if auth is None:
+            auth = cm_auth
         data = api.search(auth, **kwargs)
         obj = json.loads(data)
         rv = [ cls(auth, json.dumps(row)) for row in obj['rows'] ]
@@ -129,6 +131,8 @@ class Annotation(object):
                'tags': tags, 
                'text': text, 
                'uri': uri}
+        if not auth:
+            auth = cm_auth
         data = api.create(auth, json.dumps(obj))
         return cls(auth, data)
 
@@ -155,7 +159,7 @@ class TagSet:
         return False
 
     def set(self, tags):
-        if self._annotation._auth is None and auth is None:
+        if self._annotation._auth is None and cm_auth is None:
             raise AttributeError('can\'t set attribute (no authorization)')
         if not isinstance(tags, (tuple, list)):
             msg = 'direct assignment to tags must be from a tuple or list'
@@ -184,7 +188,7 @@ class TagSet:
         self.set(tags)
         return
 
-def search(uri=None, user=None, tags=None, text=None, search_auth=None):
+def search(uri=None, user=None, tags=None, text=None, auth=None):
     """Search for annotations.
 
     Returns a list of annotations.
@@ -217,10 +221,9 @@ def search(uri=None, user=None, tags=None, text=None, search_auth=None):
         if not isinstance(text, six.string_types):
             raise TypeError('text must be a string')
         search_args['text'] = '"%s"' % text
-    if search_auth is not None:
-        data = json.loads(api.search(search_auth, **search_args))
-    else:
-        data = json.loads(api.search(auth, **search_args))
+    if auth is None:
+        auth = cm_auth
+    data = json.loads(api.search(auth, **search_args))
     return [ Annotation(None, row) for row in data['rows'] ]
 
 # eof

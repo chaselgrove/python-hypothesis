@@ -22,13 +22,13 @@ def server(url):
     return
 
 @contextlib.contextmanager
-def auth(url):
-    orig_auth = annotation.auth
-    annotation.auth = url
+def auth(token):
+    orig_auth = annotation.cm_auth
+    annotation.cm_auth = token
     try:
         yield
     finally:
-        annotation.auth = orig_auth
+        annotation.cm_auth = orig_auth
     return
 
 __version__ = '0.3.0'
