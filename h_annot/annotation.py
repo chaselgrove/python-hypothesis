@@ -102,14 +102,16 @@ class Annotation(object):
         return self._dict['user']
 
     @classmethod
-    def load(cls, annot_id, auth=None):
+    def load(cls, annot_id, load_auth=None):
+        if load_auth is None:
+            load_auth = auth
         try:
-            data = api.read(auth, annot_id)
+            data = api.read(load_auth, annot_id)
         except APIError as data:
             if data.response.status_code == 404:
                 raise KeyError('annotation ID %s not found' % annot_id)
             raise
-        return cls(auth, data)
+        return cls(load_auth, data)
 
     @classmethod
     def search(cls, auth=None, **kwargs):
@@ -182,7 +184,7 @@ class TagSet:
         self.set(tags)
         return
 
-def search(uri=None, user=None, tags=None, text=None, auth=None):
+def search(uri=None, user=None, tags=None, text=None, search_auth=None):
     """Search for annotations.
 
     Returns a list of annotations.
@@ -215,7 +217,10 @@ def search(uri=None, user=None, tags=None, text=None, auth=None):
         if not isinstance(text, six.string_types):
             raise TypeError('text must be a string')
         search_args['text'] = '"%s"' % text
-    data = json.loads(api.search(auth, **search_args))
+    if search_auth is not None:
+        data = json.loads(api.search(search_auth, **search_args))
+    else:
+        data = json.loads(api.search(auth, **search_args))
     return [ Annotation(auth, row) for row in data['rows'] ]
 
 # eof
