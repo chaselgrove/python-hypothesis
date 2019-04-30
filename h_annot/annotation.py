@@ -221,6 +221,6 @@ def search(uri=None, user=None, tags=None, text=None, search_auth=None):
         data = json.loads(api.search(search_auth, **search_args))
     else:
         data = json.loads(api.search(auth, **search_args))
-    return [ Annotation(auth, row) for row in data['rows'] ]
+    return [ Annotation(None, row) for row in data['rows'] ]
 
 # eof
