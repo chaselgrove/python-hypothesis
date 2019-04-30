@@ -11,6 +11,7 @@
 
 import unittest
 import h_annot
+from . import config
 
 class TestSearch(unittest.TestCase):
 
@@ -77,6 +78,27 @@ class TestSearchText(unittest.TestCase):
     def test_search_tags(self):
         text_okay = [ self.text in a.text.lower() for a in self.annotations ]
         self.assertTrue(all(text_okay))
+        return
+
+class TestAuthenticatedSearch(unittest.TestCase):
+
+    @config.server_test
+    @config.params('TestSearch:auth_token', 'TestSearch:uri', 'TestSearch:text')
+    def setUp(self, auth, uri, text):
+        self.text = text
+        public_annotations = h_annot.annotation.search(uri=uri, text=self.text)
+        for annot in public_annotations:
+            if self.text in annot.text:
+                fmt = '"%s" is found in a public annotation on %s'
+                raise ValueError(fmt % (self.text, uri))
+        with h_annot.auth(auth):
+            self.annotations = h_annot.annotation.search(uri=uri, 
+                                                         text=self.text)
+        return
+
+    def test_authenticated_search(self):
+        text_matches = [ self.text in a.text for a in self.annotations ]
+        self.assertTrue(any(text_matches))
         return
 
 # eof
