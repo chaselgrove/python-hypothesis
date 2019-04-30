@@ -22,7 +22,7 @@ register :
 	python setup.py register
 
 upload : $(PACKAGE_FILES)
-	python -m twine upload $^
+	python3 -m twine upload $^
 
 check : 
 	python setup.py check
