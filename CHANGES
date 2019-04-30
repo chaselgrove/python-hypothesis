@@ -26,3 +26,12 @@ https://github.com/chaselgrove/python-hypothesis
     Added a context manager to switch servers.
 
     Added OAuth API calls and classes.
+
+0.4.0 -- 30 April 2019
+
+    Added h_annot.search() and deprecated Annotation.search().
+
+    Added authentication context manager h_annot.auth() and deprecated 
+    the use of authentication tokens stored with annotations.
+
+    Added TagSet.remove().
