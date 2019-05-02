@@ -35,3 +35,9 @@ https://github.com/chaselgrove/python-hypothesis
     the use of authentication tokens stored with annotations.
 
     Added TagSet.remove().
+
+0.4.1 -- 2 May 2019
+
+    Updated search() to return a SearchResults object.
+
+    Added support for sort, order, and after in search().

@@ -3,19 +3,19 @@
 
 default : build
 
-PACKAGE_FILES = dist/python-hypothesis-0.4.0.tar.gz \
-                dist/python_hypothesis-0.4.0-py2-none-any.whl \
-                dist/python_hypothesis-0.4.0-py3-none-any.whl
+PACKAGE_FILES = dist/python-hypothesis-0.4.1.tar.gz \
+                dist/python_hypothesis-0.4.1-py2-none-any.whl \
+                dist/python_hypothesis-0.4.1-py3-none-any.whl
 
 build : $(PACKAGE_FILES)
 
-dist/python-hypothesis-0.4.0.tar.gz : 
+dist/python-hypothesis-0.4.1.tar.gz : 
 	python setup.py sdist
 
-dist/python_hypothesis-0.4.0-py2-none-any.whl : 
+dist/python_hypothesis-0.4.1-py2-none-any.whl : 
 	python setup.py bdist_wheel
 
-dist/python_hypothesis-0.4.0-py3-none-any.whl : 
+dist/python_hypothesis-0.4.1-py3-none-any.whl : 
 	python3 setup.py bdist_wheel
 
 register : 
