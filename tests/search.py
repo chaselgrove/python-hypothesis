@@ -7,7 +7,8 @@
 # filter has been applied properly, so we consider this an error because 
 # the test can't do its job.  (We choose to trigger an error rather than 
 # to skip the test so the problem is clear in the test output.)  These 
-# errors are triggered by the exceptions in the setUp()s.
+# errors are triggered by the exceptions in the setUp()s and 
+# setUpClass()es.
 
 import itertools
 import dateutil.parser
@@ -17,11 +18,12 @@ from . import config
 
 class TestSearchUser(unittest.TestCase):
 
-    def setUp(self):
-        self.user = 'acct:chaselgrove@hypothes.is'
-        self.annotations = h_annot.annotation.search(user=self.user)
-        if len(self.annotations) == 0:
-            raise ValueError('no annotations for user %s found' % self.user)
+    @classmethod
+    def setUpClass(cls):
+        cls.user = 'acct:chaselgrove@hypothes.is'
+        cls.annotations = h_annot.annotation.search(user=cls.user)
+        if len(cls.annotations) == 0:
+            raise ValueError('no annotations for user %s found' % cls.user)
         return
 
     def test_search_user(self):
@@ -30,11 +32,12 @@ class TestSearchUser(unittest.TestCase):
 
 class TestSearchURI(unittest.TestCase):
 
-    def setUp(self):
-        self.uri = 'https://web.hypothes.is'
-        self.annotations = h_annot.annotation.search(uri=self.uri)
-        if len(self.annotations) == 0:
-            raise ValueError('no annotations for URI %s found' % self.uri)
+    @classmethod
+    def setUpClass(cls):
+        cls.uri = 'https://web.hypothes.is'
+        cls.annotations = h_annot.annotation.search(uri=cls.uri)
+        if len(cls.annotations) == 0:
+            raise ValueError('no annotations for URI %s found' % cls.uri)
         return
 
     def test_search_uri(self):
@@ -45,11 +48,12 @@ class TestSearchURI(unittest.TestCase):
 
 class TestSearchTags(unittest.TestCase):
 
-    def setUp(self):
-        self.tag = 'APITest'
-        self.annotations = h_annot.annotation.search(tags=[self.tag])
-        if len(self.annotations) == 0:
-            raise ValueError('no annotations for tag %s found' % self.tag)
+    @classmethod
+    def setUpClass(cls):
+        cls.tag = 'APITest'
+        cls.annotations = h_annot.annotation.search(tags=[cls.tag])
+        if len(cls.annotations) == 0:
+            raise ValueError('no annotations for tag %s found' % cls.tag)
         return
 
     def test_search_tags(self):
@@ -59,11 +63,12 @@ class TestSearchTags(unittest.TestCase):
 
 class TestSearchText(unittest.TestCase):
 
-    def setUp(self):
-        self.text = 'imagining'
-        self.annotations = h_annot.annotation.search(text=self.text)
-        if len(self.annotations) == 0:
-            raise ValueError('no annotations for tag %s found' % self.tag)
+    @classmethod
+    def setUpClass(cls):
+        cls.text = 'imagining'
+        cls.annotations = h_annot.annotation.search(text=cls.text)
+        if len(cls.annotations) == 0:
+            raise ValueError('no annotations for tag %s found' % cls.tag)
         return
 
     def test_search_tags(self):
@@ -94,10 +99,11 @@ class TestAuthenticatedSearch(unittest.TestCase):
 
 class TestSearchResults(unittest.TestCase):
 
-    def setUp(self):
-        self.no_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', text='this_annotation_should_not_exist', user='chaselgrove')
-        self.some_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', user='chaselgrove')
-        self.all_results = h_annot.search()
+    @classmethod
+    def setUpClass(cls):
+        cls.no_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', text='this_annotation_should_not_exist', user='chaselgrove')
+        cls.some_results = h_annot.search(uri='https://github.com/chaselgrove/python-hypothesis', user='chaselgrove')
+        cls.all_results = h_annot.search()
         return
 
     def test_type(self):
@@ -149,14 +155,15 @@ class TestSearchOrdering(unittest.TestCase):
     # 250 results and their ids to make sure SearchResults is behaving as 
     # well)
 
-    def setUp(self):
-        self.id_asc_results = h_annot.search(sort='id', order='asc')
-        self.created_desc_results = h_annot.search(sort='created', order='desc')
-        self.id_asc_annotations = list(itertools.islice(self.id_asc_results, 250))
-        self.created_desc_annotations = list(itertools.islice(self.created_desc_results, 250))
-        if len(self.id_asc_annotations) != 250:
+    @classmethod
+    def setUpClass(cls):
+        cls.id_asc_results = h_annot.search(sort='id', order='asc')
+        cls.created_desc_results = h_annot.search(sort='created', order='desc')
+        cls.id_asc_annotations = list(itertools.islice(cls.id_asc_results, 250))
+        cls.created_desc_annotations = list(itertools.islice(cls.created_desc_results, 250))
+        if len(cls.id_asc_annotations) != 250:
             raise ValueError('unexpected number of results')
-        if len(self.created_desc_annotations) != 250:
+        if len(cls.created_desc_annotations) != 250:
             raise ValueError('unexpected number of results')
         return
 
@@ -185,13 +192,14 @@ class TestSearchAfter(unittest.TestCase):
     # since SearchResults uses after internally, we check 250 results and 
     # check for unique IDs to make sure SearchResults is paging correctly
 
-    def setUp(self):
-        self.cutoff = dateutil.parser.parse('2016-01-01T00:00:00.000000+00:00')
-        self.results = h_annot.search(sort='created', 
+    @classmethod
+    def setUpClass(cls):
+        cls.cutoff = dateutil.parser.parse('2016-01-01T00:00:00.000000+00:00')
+        cls.results = h_annot.search(sort='created', 
                                       order='asc', 
-                                      after=self.cutoff)
-        self.results_list = list(itertools.islice(self.results, 250))
-        if len(self.results_list) != 250:
+                                      after=cls.cutoff)
+        cls.results_list = list(itertools.islice(cls.results, 250))
+        if len(cls.results_list) != 250:
             raise ValueError('unexpected number of results')
         return
 
