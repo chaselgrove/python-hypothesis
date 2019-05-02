@@ -86,3 +86,15 @@ Tags are accessed and changed through the ``tags`` attribute.  This attribute ac
 Searching via ``Annotation.search()`` is deprecated.  This search just wrapped the results of ``api.search()`` in Annotation constructors, so ``api.search()`` should now be used for searches that used ``Annotation.search()``.  For a high-level search interface, use ``h_annot.search()``.  This takes keyword arguments ``uri``, ``user``, ``tags``, and ``text``.  Note that ``tags`` are joined by AND and separate words in ``text`` are joined by OR, which is the behavior of the `Hypothesis search API`_.  ``h_annot.search()`` respects the authentication set by the ``h_annot.auth()`` context manager.
 
 .. _Hypothesis search API: https://h.readthedocs.io/en/latest/api-reference/#tag/annotations/paths/~1search/get
+
+``h_annot.search()`` returns a ``SearchResults`` instance.  ``SearchResults`` instances respond properly to ``len()``, and iteration will result in annotations:
+
+    >>> results = h_annot.search()
+    800765
+    >>> len(results)
+    >>> for annotation in results:
+    ...     print(annotation)
+    ...     break
+    <Hypothesis annotation WcxuNG0CEemcl4_d0fJoaw>
+
+The ``SearchResults`` object will load more results as needed from Hypothesis, but with a one second delay before each subsequent query to avoid rapid repeated hits to Hypothesis if something easily done and seemingly innocuous like ``list(h_annot.search())`` is done.
