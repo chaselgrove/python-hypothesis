@@ -41,3 +41,11 @@ https://github.com/chaselgrove/python-hypothesis
     Updated search() to return a SearchResults object.
 
     Added support for sort, order, and after in search().
+
+0.4.2 -- 9 June 2020
+
+    Added support for changing Annotation.uri.
+
+    Worked around a Hypothesis search bug in tests.
+
+    Updated CSRF token handling in tests.

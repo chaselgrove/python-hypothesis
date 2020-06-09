@@ -3,19 +3,19 @@
 
 default : build
 
-PACKAGE_FILES = dist/python-hypothesis-0.4.1.tar.gz \
-                dist/python_hypothesis-0.4.1-py2-none-any.whl \
-                dist/python_hypothesis-0.4.1-py3-none-any.whl
+PACKAGE_FILES = dist/python-hypothesis-0.4.2.tar.gz \
+                dist/python_hypothesis-0.4.2-py2-none-any.whl \
+                dist/python_hypothesis-0.4.2-py3-none-any.whl
 
 build : $(PACKAGE_FILES)
 
-dist/python-hypothesis-0.4.1.tar.gz : 
-	python setup.py sdist
+dist/python-hypothesis-0.4.2.tar.gz : 
+	python3 setup.py sdist
 
-dist/python_hypothesis-0.4.1-py2-none-any.whl : 
+dist/python_hypothesis-0.4.2-py2-none-any.whl : 
 	python setup.py bdist_wheel
 
-dist/python_hypothesis-0.4.1-py3-none-any.whl : 
+dist/python_hypothesis-0.4.2-py3-none-any.whl : 
 	python3 setup.py bdist_wheel
 
 register : 
@@ -46,7 +46,8 @@ clean :
            h_annot/__pycache__ \
            tests/__pycache__ \
            build \
-           python_hypothesis.egg-info
+           python_hypothesis.egg-info \
+           .eggs
 
 clobber : clean
 	rm -rf dist

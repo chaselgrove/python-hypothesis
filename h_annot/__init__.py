@@ -31,6 +31,6 @@ def auth(token):
         annotation.cm_auth = orig_auth
     return
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 # eof
