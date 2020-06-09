@@ -45,7 +45,8 @@ clean :
            tests/*.pyc \
            h_annot/__pycache__ \
            tests/__pycache__ \
-           build
+           build \
+           python_hypothesis.egg-info
 
 clobber : clean
 	rm -rf dist
