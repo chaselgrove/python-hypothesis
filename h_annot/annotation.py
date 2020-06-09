@@ -95,6 +95,15 @@ class Annotation(object):
     def uri(self):
         return self._dict['uri']
 
+    @uri.setter
+    def uri(self, value):
+        if self._auth is None and cm_auth is None:
+            raise AttributeError('can\'t set attribute (no authorization)')
+        new_dict = dict(self._dict)
+        new_dict['uri'] = value
+        self._update(new_dict)
+        return
+
     @property
     def updated(self):
         return dateutil.parser.parse(self._dict['updated'])

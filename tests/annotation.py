@@ -157,4 +157,27 @@ class TestEditsCMAuth(unittest.TestCase):
         self.assertRaises(KeyError, self.annotation.tags.remove, 'TestTag')
         return
 
+class TestChangeURI(unittest.TestCase):
+
+    @config.params('TestChangeURI:auth_token', 
+                   'TestChangeURI:annot_id', 
+                   'TestChangeURI:uri_i', 
+                   'TestChangeURI:uri_f')
+    def setUp(self, auth_token, annot_id, uri_i, uri_f):
+        with h_annot.auth(auth_token):
+            self.annotation = h_annot.Annotation.load(annot_id)
+        self.uri_i = uri_i
+        self.uri_f = uri_f
+        return
+
+    def tearDown(self):
+        self.annotation.uri = self.uri_i
+        return
+
+    def test_change_uri(self):
+        self.annotation.uri = self.uri_f
+        annot2 = h_annot.Annotation.load(self.annotation.id)
+        self.assertEqual(annot2.uri, self.uri_f)
+        return
+
 # eof
