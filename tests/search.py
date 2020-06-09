@@ -34,14 +34,14 @@ class TestSearchURI(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.uri = 'https://web.hypothes.is'
+        cls.uri = 'https://web.hypothes.is/'
         cls.annotations = h_annot.annotation.search(uri=cls.uri)
         if len(cls.annotations) == 0:
             raise ValueError('no annotations for URI %s found' % cls.uri)
         return
 
     def test_search_uri(self):
-        uris_okay = [ a.uri in (self.uri, self.uri+'/')
+        uris_okay = [ a.uri in (self.uri, self.uri.rstrip('/'))
                       for a in self.annotations ]
         self.assertTrue(all(uris_okay))
         return
